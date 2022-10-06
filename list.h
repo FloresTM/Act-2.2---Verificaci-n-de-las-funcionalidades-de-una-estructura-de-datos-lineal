@@ -222,8 +222,39 @@ T DoubleLinkedList<T>::last() const {
 // =================================================================
 template <class T>
 T DoubleLinkedList<T>::before(T val) const {
-	
-	return val;
+  // g++ -std=c++11 test1.cpp -o runTest1
+  // to do
+ Node<T> *p;
+
+  if (empty()) {
+		throw NoSuchElement();
+	}
+
+  if(head->value == val){
+    throw NoSuchElement();
+  }
+
+  p = head;
+
+  
+  while (p != NULL) {
+
+    if (p->value == val) {
+        return p->previous->value;
+    }
+    p = p->next;
+  }
+    
+  throw NoSuchElement();
+
+  /*
+if(p->previous == NULL){
+      throw NoSuchElement();
+    }
+*/
+  
+  //return -1;
+	//return val;
 }
 
 // =================================================================
@@ -233,8 +264,33 @@ T DoubleLinkedList<T>::before(T val) const {
 // =================================================================
 template <class T>
 T DoubleLinkedList<T>::after(T val) const {
-	
-	return val;
+// g++ -std=c++11 test2.cpp -o runTest2
+  // to do
+
+  Node<T> *p;
+
+  if (empty()) {
+		throw NoSuchElement();
+	}
+
+  p = head;
+  //int index = -1;
+  
+  while (p != NULL) {
+    //++index;
+    
+    if(p->next == NULL){
+      throw NoSuchElement();
+    }
+    else if (p->value == val) {
+        return p->next->value;
+    }
+    p = p->next;
+  }
+    
+  throw NoSuchElement();
+  
+	//return val;
 }
 
 // =================================================================
@@ -294,7 +350,44 @@ void DoubleLinkedList<T>::push_back(T val) {
 // =================================================================
 template <class T>
 void DoubleLinkedList<T>::insert_before(T lookingFor, T newVal) {
+  // g++ -std=c++11 test3.cpp -o runTest3
 	// TO DO
+
+  Node<T> *p, *q, *newNode;
+
+  p = head;
+
+  if(empty()){
+    throw NoSuchElement();
+  }
+
+  if(head->value == lookingFor){
+    newNode = new Node<T>(newVal);
+
+    newNode->next = p;
+    newNode->previous = NULL;
+    p->previous = newNode;
+    head = newNode;
+  }
+
+  while(p->value != lookingFor && p->next != NULL){
+    q = p;
+    p = p->next;
+  }
+
+  if (p->value != lookingFor)
+        throw NoSuchElement();
+  
+  if(p->value == lookingFor){
+      newNode = new Node<T>(newVal);
+      q->next = newNode;
+      p->previous = newNode;
+      newNode->next = p;
+      newNode->previous = q;
+    }
+
+  size++;
+
 }
 
 // =================================================================
@@ -304,7 +397,43 @@ void DoubleLinkedList<T>::insert_before(T lookingFor, T newVal) {
 // =================================================================
 template <class T>
 void DoubleLinkedList<T>::insert_after(T lookingFor, T newVal) {
+  // g++ -std=c++11 test4.cpp -o runTest4
 	// TO DO
+
+  Node<T> *preptr, *ptr, *newNode;
+  newNode = new Node<T>(newVal);
+
+  if(empty()){
+    throw NoSuchElement();
+  }
+
+  else if (contains(lookingFor) == false){
+        throw NoSuchElement();
+  }
+
+  else {
+    ptr = head;
+    
+    while(preptr->value != lookingFor && ptr->next != NULL){
+    preptr = ptr;
+    ptr = ptr->next;
+  }
+
+  if(ptr->next == NULL){
+    push_back(newVal);
+  }
+
+  else {
+    preptr->next = newNode;
+    newNode->next = ptr;
+    ptr->previous = newNode;
+    newNode->previous = preptr;
+
+  size++;
+  }   
+
+  }
+
 }
 
 // =================================================================
